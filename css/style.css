@@ -1,0 +1,141 @@
+html {  
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: black;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.title {
+  font-family: 'Berkshire Swash', cursive;
+  font-size: 4em;
+  margin: 0 auto;
+  color: #FFD700;
+  text-shadow: 2px 2px 5px #000000;
+  display: block;
+  width: 800px;
+  position: relative;
+  z-index: 10;
+}
+.board-wrap {
+  width: 800px;
+  height: 582px;
+  background-image: url(../img/stone-bg.jpg);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 44px 32px;
+  margin: -1em auto;
+  border: 3px solid #FFD700;
+  position:relative;
+}
+.board {
+  float: left;
+  margin-right: 10px;
+  border: 2px solid #cebbaa;
+  background-image: url(../img/grass.jpg);
+}
+.player-img{
+  position : absolute;
+  height: 53px;
+  width: 35px;
+  top: -49px;
+  left: 34%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url(../img/player.png);
+  z-index:99;
+}
+.in-hand {
+  position : absolute;
+  top: -5px;
+  left: -17px;
+  height: 40px;
+  width: 32px; 
+  background-image: url(../img/sword.png);
+}
+.cell { 
+  background-color: transparent;
+  height: 62px;
+  width: 62px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.alive {
+  background-image: url(../img/orc.gif);
+  background-size: 36px;
+}
+.dead {
+  background-size: 62px, cover;
+}
+.sidebar {
+  position: relative;
+  width: 196px;
+  height: 436px;
+  float: right;
+}
+button {
+  font-family: 'Berkshire Swash', cursive;
+  width: 196px;
+  height: 63px;
+  font-size: 1.5em;
+  cursor: inherit;
+  background-color: #A52A2A;
+  color: #FFD700;
+  text-shadow: 2px 2px 5px #000000;
+  border: 2px solid #cebbaa;
+  outline: none;
+}
+button.menu {
+  margin-bottom: 46px;
+}
+button.quit {
+  top: 437px;
+  right:0;
+  position: absolute;
+  display: none;
+}
+.score-card {
+  margin: 5px 0;
+  width: 196px;
+  float: right;
+  box-sizing: border-box;
+}
+.level {
+  font-size: 2em;
+}
+.score, .level {
+  float: right;
+  color: #FFD700;  
+  font-family: 'Berkshire Swash', cursive;
+  width: 186px;
+  padding: 5px;
+  text-align: center;
+  background-color: black;
+  display: none;
+}
+.score {
+  padding-bottom: 10px;
+}
+.orc-face {
+  display: inline-block;
+  margin: 4.5px 9.1px;
+  box-shadow: 1px 1px 5px;
+  border-radius: 50%;
+  width: 21px;   
+}
+.konami {
+  font-family: 'Russo One', serif;
+  font-size: 3em;
+  background-color: red;
+  color: white;
+  position: absolute;
+  top:40%;
+  left: -100%;
+  padding: 0 0.13em;
+  border-radius: 10px;
+  display: none;
+}
