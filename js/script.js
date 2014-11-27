@@ -1,29 +1,39 @@
 $(document).ready(function() {
   var playing = false;
   var score = 0;
-  var nextLevel = 0;
+  var nextLevel = 5;
   var level = 1;
   var konami = false;
   var inHand = '';
   var swing = '';
   function spawn() {
+    var alives = [];
+    $('.alive').each(function() {
+      alives.push($(this));
+    });
     //spawn orc in random location if playing == true
-    if (playing)  {
+    if (playing && alives.length < level)  {
       var randomCell = Math.floor(Math.random()*64);
       $('.cell').eq(randomCell).addClass('alive');
     }
   }//end spawn function
   function play() {
-    var timer; //for clearInterval function that checks if the mouse has stopped moving
+    //timer is for clearInterval/setTimeout function that checks if the mouse has stopped moving
+    var timer; 
+    //this moves the player-img to the play button in a mock snap to the cursor (should be changed to actually go to the cursor)
     $('.player-img').css('background-image', 'url(img/player.gif)').animate({
       'top': '35px',
       'left': '70%'},
       300, function() {
       playing = true;
-      spawn();
+      //spawn one, set interval to spawn more repeatedly
+      var randomCell = Math.floor(Math.random()*64);
+      $('.cell').eq(randomCell).addClass('alive');
+      setInterval(spawn, 1000);
     });
-    nextLevel += level * 5;
+    //hide the menu and the sword or whatever is in the players hand before the game starts
     $('.menu, .in-hand').hide();
+    //show the score card (orc heads), the quit button, the level, the score, sets variable for cursor image
     $('.quit, .score-card').show();
     $('.level').text('Level ' + level).show();
     $('.score').text('Orcs Killed: 0 / ' + nextLevel).show();
@@ -33,8 +43,8 @@ $(document).ready(function() {
       swing = 'url(img/smoke.png), auto';
       $('html').css('background-color', 'green');
     } else {
-      inHand = 'url(img/sword.png), auto';
-      swing = 'url(img/sword-swing.png), auto';
+      inHand = 'url(img/sword.cur), auto';
+      swing = 'url(img/sword-swing.cur), auto';
     }
     $('html').css('cursor', inHand);
 
@@ -78,24 +88,26 @@ $(document).ready(function() {
       if (clicked.hasClass('alive')) {
         clicked.removeClass('alive');
         clicked.addClass('dead');  
-          var timeout = 200;
-          var gradientSpread = 57;
-          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #8A0707 0%, rgba(35, 55, 6, 0.0) ' + gradientSpread + '%)');
-          setTimeout(function() { 
-            clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #8A0707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 5) + '%)');
-          }, timeout);
-          setTimeout(function() { 
-            clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #8A0707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 10) + '%)');
-          }, timeout * 2);
-          setTimeout(function() { 
-            clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #8A0707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 15) + '%)');
-          }, timeout * 3);
-          setTimeout(function() { 
-            clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #8A0707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 20) + '%)');
-          }, timeout * 4);
-          setTimeout(function() { 
-            clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #8A0707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 25) + '%)');
-          }, timeout * 5);
+        //for some reason this animation sequence looks better when each step is written out instead of being looped through. this is the dead orc bleeding
+        var timeout = 200;
+        var gradientSpread = 57;
+        clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + gradientSpread + '%)');
+        setTimeout(function() { 
+          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 5) + '%)');
+        }, timeout);
+        setTimeout(function() { 
+          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 10) + '%)');
+        }, timeout * 2);
+        setTimeout(function() { 
+          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 15) + '%)');
+        }, timeout * 3);
+        setTimeout(function() { 
+          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 20) + '%)');
+        }, timeout * 4);
+        setTimeout(function() { 
+          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 25) + '%)');
+        }, timeout * 5);
+
         setTimeout(function() { 
           clicked.fadeOut('400', function() {
             clicked.css('background-image', '');
@@ -134,13 +146,10 @@ $(document).ready(function() {
               'padding-top': '20px',
               'padding-left': '24.4px'
             });
-          }  
+          } else {
+            $('.score-card').css('padding', '0');
+          } 
         }  
-        var spawnSpeed = 2000 - level * 200;
-        var randomTime = (Math.floor(Math.random()*2000)) + spawnSpeed;
-        setTimeout(function() { 
-          spawn();
-        }, randomTime);
       }//end if (alive)
     });//end .cell.on 'click' for killing action
   }//end play function
@@ -168,11 +177,11 @@ $(document).ready(function() {
       //set cursor back to default
       inHand = 'default';
       $('html').css('cursor', inHand);
+      $('.alive').removeClass('alive');
     }, 2000);
     setTimeout(function(){
       $('.menu').fadeIn();
     }, 2400);
-    $('.alive').removeClass('alive');
   }//end quit function
   $('.start').on('click', function() {
     play();
