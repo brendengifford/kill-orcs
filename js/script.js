@@ -17,6 +17,72 @@ $(document).ready(function() {
       $('.cell').eq(randomCell).addClass('alive');
     }
   }//end spawn function
+  function kill(clicked) {
+    clicked.removeClass('alive');
+    clicked.addClass('dead');  
+    //for some reason this animation sequence looks better when each step is written out instead of being looped through. this is the dead orc bleeding
+    var timeout = 200;
+    var gradientSpread = 57;
+    clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + gradientSpread + '%)');
+    setTimeout(function() { 
+      clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 5) + '%)');
+    }, timeout);
+    setTimeout(function() { 
+      clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 10) + '%)');
+    }, timeout * 2);
+    setTimeout(function() { 
+      clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 15) + '%)');
+    }, timeout * 3);
+    setTimeout(function() { 
+      clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 20) + '%)');
+    }, timeout * 4);
+    setTimeout(function() { 
+      clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 25) + '%)');
+    }, timeout * 5);
+
+    setTimeout(function() { 
+      clicked.fadeOut('400', function() {
+        clicked.css('background-image', '');
+        clicked.removeClass('dead');
+        clicked.show();
+      });
+    }, 2000);
+    //score should be it's own function
+    score++;
+    if (score == nextLevel) {
+      level++
+      nextLevel += level * 5;
+      score = 0;
+      $('.level').text('Level ' + level);
+      $('.score').text('Orcs Killed: ' + score + ' / ' + nextLevel);
+      $('.score-card').html('');
+    } else {
+      $('.score').text('Orcs Killed: ' + score + ' / ' + nextLevel);
+      $('.score-card').append('<img src="img/orc-face.gif" class="orc-face">')
+      //make room for more orc-faces
+      if (score > 50 && score < 161) {
+        $('.orc-face').css({
+          'margin-top': '-10px',
+          'margin-left': '-13px'
+        });
+        $('.score-card').css({
+          'padding-top': '15px',
+          'padding-left': '23px'
+        });
+      } else if (score > 160) {
+        $('.orc-face').css({
+          'margin-top': '-12px',
+          'margin-left': '-20px'
+        });
+        $('.score-card').css({
+          'padding-top': '20px',
+          'padding-left': '24.4px'
+        });
+      } else {
+        $('.score-card').css('padding', '0');
+      } 
+    }  
+  }
   function play() {
     //timer is for clearInterval/setTimeout function that checks if the mouse has stopped moving
     var timer; 
@@ -86,70 +152,7 @@ $(document).ready(function() {
       var clicked = $(this);
       event.preventDefault();
       if (clicked.hasClass('alive')) {
-        clicked.removeClass('alive');
-        clicked.addClass('dead');  
-        //for some reason this animation sequence looks better when each step is written out instead of being looped through. this is the dead orc bleeding
-        var timeout = 200;
-        var gradientSpread = 57;
-        clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + gradientSpread + '%)');
-        setTimeout(function() { 
-          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 5) + '%)');
-        }, timeout);
-        setTimeout(function() { 
-          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 10) + '%)');
-        }, timeout * 2);
-        setTimeout(function() { 
-          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 15) + '%)');
-        }, timeout * 3);
-        setTimeout(function() { 
-          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 20) + '%)');
-        }, timeout * 4);
-        setTimeout(function() { 
-          clicked.css('background-image', 'url(img/dead-orc.png), radial-gradient(circle farthest-corner at center, #C40707 0%, rgba(35, 55, 6, 0.0) ' + (gradientSpread + 25) + '%)');
-        }, timeout * 5);
-
-        setTimeout(function() { 
-          clicked.fadeOut('400', function() {
-            clicked.css('background-image', '');
-            clicked.removeClass('dead');
-            clicked.show();
-          });
-        }, 2000);
-        //score should be it's own function
-        score++;
-        if (score == nextLevel) {
-          level++
-          nextLevel += level * 5;
-          score = 0;
-          $('.level').text('Level ' + level);
-          $('.score').text('Orcs Killed: ' + score + ' / ' + nextLevel);
-          $('.score-card').html('');
-        } else {
-          $('.score').text('Orcs Killed: ' + score + ' / ' + nextLevel);
-          $('.score-card').append('<img src="img/orc-face.gif" class="orc-face">')
-          //make room for more orc-faces
-          if (score > 50 && score < 161) {
-            $('.orc-face').css({
-              'margin-top': '-10px',
-              'margin-left': '-13px'
-            });
-            $('.score-card').css({
-              'padding-top': '15px',
-              'padding-left': '23px'
-            });
-          } else if (score > 160) {
-            $('.orc-face').css({
-              'margin-top': '-12px',
-              'margin-left': '-20px'
-            });
-            $('.score-card').css({
-              'padding-top': '20px',
-              'padding-left': '24.4px'
-            });
-          } else {
-            $('.score-card').css('padding', '0');
-          } 
-        }  
+        kill(clicked);
       }//end if (alive)
     });//end .cell.on 'click' for killing action
   }//end play function
